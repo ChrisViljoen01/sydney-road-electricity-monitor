@@ -18,6 +18,7 @@ jobs:
     runs-on: [self-hosted, windows, electricity-monitor]
     timeout-minutes: 30
     env:
+      NODE_OPTIONS: --use-system-ca
       SYDNEY_ROAD_DATA_DIR: ${{ vars.SYDNEY_ROAD_DATA_DIR }}
       SYDNEY_ROAD_ACCOUNTS_FILE: ${{ vars.SYDNEY_ROAD_ACCOUNTS_FILE }}
       CONNECT_DAILY_PEAK_RECIPIENTS: ${{ secrets.CONNECT_DAILY_PEAK_RECIPIENTS }}
