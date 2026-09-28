@@ -1,0 +1,38 @@
+name: Daily peak usage email
+
+on:
+  schedule:
+    # 07:00 Africa/Johannesburg (UTC+2) every day.
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-peak-usage
+  cancel-in-progress: false
+
+jobs:
+  send-daily-peak-email:
+    runs-on: [self-hosted, windows, electricity-monitor]
+    timeout-minutes: 30
+    env:
+      SYDNEY_ROAD_DATA_DIR: ${{ vars.SYDNEY_ROAD_DATA_DIR }}
+      SYDNEY_ROAD_ACCOUNTS_FILE: ${{ vars.SYDNEY_ROAD_ACCOUNTS_FILE }}
+      CONNECT_DAILY_PEAK_RECIPIENTS: ${{ secrets.CONNECT_DAILY_PEAK_RECIPIENTS }}
+      PNPSCADA_USERNAME: ${{ secrets.PNPSCADA_USERNAME }}
+      PNPSCADA_PASSWORD: ${{ secrets.PNPSCADA_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+
+      - name: Install application dependencies
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Refresh readings and email previous-day peak usage
+        run: python -m electricity_tool.daily_peak_alert

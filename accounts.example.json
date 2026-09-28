@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Site solar meter",
+    "area": "Site Solar",
+    "code": "REPLACE_WITH_METER_CODE",
+    "eid": "REPLACE_WITH_EID"
+  },
+  {
+    "name": "Warehouse meter",
+    "area": "Warehouse 1",
+    "code": "REPLACE_WITH_METER_CODE",
+    "eid": "REPLACE_WITH_EID"
+  }
+]
