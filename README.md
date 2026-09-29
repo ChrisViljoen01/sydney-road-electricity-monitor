@@ -389,11 +389,31 @@ The command-line tool reads the saved Windows credential. It also supports the
 `PNPSCADA_USERNAME` and `PNPSCADA_PASSWORD` environment variables. Do not put a
 password directly in a scheduled-task command.
 
-### Daily peak-usage email through GitHub Actions
+### Daily peak-usage email at 08:00
 
-`.github/workflows/daily-peak-usage.yml` schedules one daily job at **08:00
-Africa/Johannesburg time** (06:00 UTC). It runs only on a self-hosted Windows
-runner labelled `windows` and `electricity-monitor`, refreshes the recent
+Windows Task Scheduler is the production trigger at **08:00
+Africa/Johannesburg time**, with sign-in catch-up after 08:00 and
+`StartWhenAvailable` enabled. The PC must be awake, online and signed in under
+the account holding the credentials; the screen can be locked. Before-08:00
+sign-ins wait for the daily trigger. Retries and catch-up runs use the existing
+sent-date marker to skip reports already sent. Catch-up sends the latest previous
+day, not a separate email for every day the PC was off.
+
+The task invokes `scripts\run_daily_peak_email.ps1 -SettingsPath <local-json>`
+from a persistent code checkout outside any temporary session or runner work
+folder. The private JSON file supplies `DataDirectory`, `AccountsFile`,
+`PythonPath` (an installed interpreter with the application dependencies), and
+`Recipients` (semicolon-separated). Do not commit this file. The machine's
+Windows time zone must be South Africa Standard Time. Execution logs are saved
+under the data directory's `logs` folder; failures return nonzero for Task
+Scheduler retries. The configured task retries failures three times at
+15-minute intervals and ignores overlapping starts.
+
+`.github/workflows/daily-peak-usage.yml` is manual-only for recovery; it no longer
+has a scheduled trigger. Avoid manually dispatching it while the local task is
+running, since the sent marker is not a cross-process lock.
+It runs on a self-hosted Windows runner labelled `windows` and
+`electricity-monitor`. Both entry points refresh the recent
 PNPSCADA reading window, requires complete prior-day data for every configured
 meter, forces the same official eThekwini tariff check available in Cost Centre,
 and sends one consolidated HTML CTOU Peak-period email. For Warehouses 6–8 it

@@ -30,6 +30,7 @@ logs/
 .env.*
 !.env.example
 accounts.json
+daily_email_settings.json
 .DS_Store
 Thumbs.db
 desktop.ini
