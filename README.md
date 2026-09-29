@@ -391,8 +391,8 @@ password directly in a scheduled-task command.
 
 ### Daily peak-usage email through GitHub Actions
 
-`.github/workflows/daily-peak-usage.yml` schedules one daily job at **07:00
-Africa/Johannesburg time** (05:00 UTC). It runs only on a self-hosted Windows
+`.github/workflows/daily-peak-usage.yml` schedules one daily job at **08:00
+Africa/Johannesburg time** (06:00 UTC). It runs only on a self-hosted Windows
 runner labelled `windows` and `electricity-monitor`, refreshes the recent
 PNPSCADA reading window, requires complete prior-day data for every configured
 meter, forces the same official eThekwini tariff check available in Cost Centre,

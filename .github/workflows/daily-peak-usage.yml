@@ -2,8 +2,8 @@ name: Daily peak usage email
 
 on:
   schedule:
-    # 07:00 Africa/Johannesburg (UTC+2) every day.
-    - cron: '0 5 * * *'
+    # 08:00 Africa/Johannesburg (UTC+2) every day.
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
 permissions:
